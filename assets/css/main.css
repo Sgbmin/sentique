@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gold: #D4AF37;
+  --jade: #00A86B;
+  --navy: #001F3F;
+}
+
+.bg-luxury-gradient {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--jade) 50%, var(--gold) 100%);
+}
+
+.text-gold {
+  color: var(--gold);
+}
+
+.text-jade {
+  color: var(--jade);
+}
+
+.text-navy {
+  color: var(--navy);
+}
