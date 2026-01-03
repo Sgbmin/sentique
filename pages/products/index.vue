@@ -1,129 +1,131 @@
 <script setup lang="ts">
 const supabase = useSupabaseClient()
 
-// Fetch perfumes from Supabase
-const { data: perfumes, pending } = await useAsyncData('perfumes', async () => {
-  const { data, error } = await supabase
-    .from('perfumes')
+// Fetch products from Supabase
+const { data: products, pending } = await useAsyncData('products', async () => {
+  const { data } = await supabase
+    .from('products')
     .select('*')
+    .order('created_at', { ascending: false })
   
-  if (error) throw error
-  return data
+  return data || []
 })
+
+// Fallback data if no products in database
+const defaultProducts = [{
+  id: 1,
+  name: 'Midnight Oud',
+  description: 'Deep, woody notes with hints of amber',
+  base_notes: ['Oud', 'Amber', 'Sandalwood'],
+  price: 285,
+  image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?w=400'
+}, {
+  id: 2,
+  name: 'Rose Lumière',
+  description: 'Delicate rose with jasmine undertones',
+  base_notes: ['Rose', 'Jasmine', 'Musk'],
+  price: 245,
+  image: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=400'
+}, {
+  id: 3,
+  name: 'Citrus Noir',
+  description: 'Fresh bergamot with dark leather',
+  base_notes: ['Bergamot', 'Leather', 'Vetiver'],
+  price: 265,
+  image: 'https://images.unsplash.com/photo-1563170351-be82bc888aa4?w=400'
+}]
+
+const displayProducts = computed(() => 
+  products.value?.length ? products.value : defaultProducts
+)
 
 const filters = ref({
-  category: 'all',
-  priceRange: 'all',
-  notes: []
+  search: '',
+  baseNote: ''
 })
-
-const categories = [
-  { label: 'All', value: 'all' },
-  { label: 'Floral', value: 'floral' },
-  { label: 'Woody', value: 'woody' },
-  { label: 'Citrus', value: 'citrus' },
-  { label: 'Oriental', value: 'oriental' }
-]
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-50">
-    <!-- Page Header -->
-    <UPageHeader
-      class="bg-gradient-to-r from-navy to-jade text-white"
-      title="Our Collection"
-      description="Discover our curated selection of luxury perfumes"
-    />
+  <UMain>
+    <UContainer>
+      <UPageHeader
+        title="Our Collections"
+        description="Discover exquisite fragrances crafted with the finest ingredients"
+        class="mb-8"
+      />
 
-    <UContainer class="py-12">
-      <div class="grid lg:grid-cols-4 gap-8">
-        <!-- Filters Sidebar -->
-        <aside class="lg:col-span-1">
-          <UCard variant="subtle">
-            <template #header>
-              <h3 class="text-lg font-semibold text-navy">Filters</h3>
-            </template>
+      <!-- Filters -->
+      <div class="flex gap-4 mb-8">
+        <UInput
+          v-model="filters.search"
+          icon="i-lucide-search"
+          placeholder="Search perfumes..."
+          class="flex-1"
+          size="lg"
+        />
+        <USelectMenu
+          v-model="filters.baseNote"
+          :options="['All', 'Oud', 'Rose', 'Citrus', 'Vanilla', 'Musk']"
+          placeholder="Filter by note"
+          size="lg"
+          class="w-48"
+        />
+      </div>
 
-            <div class="space-y-6">
-              <!-- Category Filter -->
-              <div>
-                <label class="text-sm font-medium text-slate-700 mb-2 block">
-                  Category
-                </label>
-                <URadioGroup
-                  v-model="filters.category"
-                  :options="categories"
-                />
-              </div>
-
-              <!-- Price Range -->
-              <div>
-                <label class="text-sm font-medium text-slate-700 mb-2 block">
-                  Price Range
-                </label>
-                <USlider
-                  v-model="filters.priceRange"
-                  :min="0"
-                  :max="500"
-                  :step="10"
-                  color="primary"
-                />
-              </div>
+      <!-- Products Grid -->
+      <UPageGrid v-if="!pending" :columns="3">
+        <UCard
+          v-for="product in displayProducts"
+          :key="product.id"
+          class="group hover:shadow-2xl hover:shadow-amber-500/20 transition-all duration-300"
+        >
+          <template #header>
+            <div class="aspect-square overflow-hidden rounded-lg">
+              <img
+                :src="product.image"
+                :alt="product.name"
+                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
             </div>
-          </UCard>
-        </aside>
+          </template>
 
-        <!-- Products Grid -->
-        <div class="lg:col-span-3">
-          <div v-if="pending" class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-            <USkeleton v-for="i in 6" :key="i" class="h-96" />
+          <div class="space-y-3">
+            <div>
+              <h3 class="text-xl font-semibold text-highlighted">{{ product.name }}</h3>
+              <p class="text-sm text-muted mt-1">{{ product.description }}</p>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              <UBadge
+                v-for="note in product.base_notes"
+                :key="note"
+                color="emerald"
+                variant="subtle"
+                size="xs"
+              >
+                {{ note }}
+              </UBadge>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-default">
+              <span class="text-2xl font-bold text-amber-600 dark:text-amber-400">
+                ${{ product.price }}
+              </span>
+              <UButton
+                :to="`/products/${product.id}`"
+                color="amber"
+                icon="i-lucide-arrow-right"
+              >
+                View Details
+              </UButton>
+            </div>
           </div>
+        </UCard>
+      </UPageGrid>
 
-          <UPageGrid v-else>
-            <UCard
-              v-for="perfume in perfumes"
-              :key="perfume.id"
-              variant="subtle"
-              class="hover:shadow-2xl transition-all duration-300 group cursor-pointer"
-              @click="navigateTo(`/products/${perfume.id}`)"
-            >
-              <div class="relative overflow-hidden rounded-lg mb-4">
-                <img
-                  :src="perfume.image_url || '/images/placeholder-perfume.jpg'"
-                  :alt="perfume.name"
-                  class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300"
-                />
-                <UBadge
-                  v-if="perfume.is_new"
-                  class="absolute top-2 right-2"
-                  color="primary"
-                  label="New"
-                />
-              </div>
-
-              <div class="space-y-2">
-                <h3 class="text-xl font-semibold text-navy">
-                  {{ perfume.name }}
-                </h3>
-                <p class="text-slate-600 text-sm line-clamp-2">
-                  {{ perfume.description }}
-                </p>
-                <div class="flex items-center justify-between">
-                  <span class="text-2xl font-bold text-gold">
-                    ${{ perfume.price }}
-                  </span>
-                  <UButton
-                    color="primary"
-                    size="sm"
-                    label="View Details"
-                    trailing-icon="i-lucide-arrow-right"
-                  />
-                </div>
-              </div>
-            </UCard>
-          </UPageGrid>
-        </div>
+      <div v-else class="grid grid-cols-3 gap-6">
+        <USkeleton v-for="i in 6" :key="i" class="h-96" />
       </div>
     </UContainer>
-  </div>
+  </UMain>
 </template>
