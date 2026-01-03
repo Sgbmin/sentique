@@ -1,9 +1,20 @@
+// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxt/ui'],
-  runtimeConfig: {
-    public: {
-      supabaseUrl: process.env.SUPABASE_URL,
-      supabaseKey: process.env.SUPABASE_KEY
+  extends: ['@nuxt/ui'],
+  
+  modules: ['@nuxtjs/supabase'],
+  
+  supabase: {
+    redirectOptions: {
+      login: '/login',
+      callback: '/confirm',
+      exclude: ['/', '/products', '/products/*']
     }
-  }
+  },
+
+  css: ['~/assets/css/main.css'],
+
+  devtools: { enabled: true },
+
+  compatibilityDate: '2024-01-01'
 })
