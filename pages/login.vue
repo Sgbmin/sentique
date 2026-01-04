@@ -1,73 +1,22 @@
 <script setup lang="ts">
-import type { AuthFormField } from '@nuxt/ui'
+import { ref } from 'vue'
+const email = ref('')
+const password = ref('')
 
-definePageMeta({
-  layout: 'auth'
-})
-
-const fields: AuthFormField[] = [
-  {
-    name: 'email',
-    type: 'email',
-    label: 'Email',
-    placeholder: 'your.email@example.com',
-    required: true,
-    icon: 'i-lucide-mail'
-  },
-  {
-    name: 'password',
-    label: 'Password',
-    type: 'password',
-    placeholder: 'Enter your password',
-    required: true,
-    icon: 'i-lucide-lock'
-  }
-]
-
-const providers = [
-  {
-    label: 'Continue with Google',
-    icon: 'i-simple-icons-google',
-    color: 'neutral' as const,
-    onClick: () => alert('Demo: Google login clicked')
-  }
-]
-
-function onSubmit(data: Record<string, any>) {
-
-  alert(`Demo Login:\nEmail: ${data.email}`)
+function login() {
+  alert(`Email: ${email.value}\nPassword: ${password.value}\n(Mock login)`)
 }
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#D4AF37]/20 via-[#00A86B]/20 to-[#000080]/20">
-    <UPageCard class="w-full max-w-md glass-effect">
-      <UAuthForm
-        title="Welcome Back"
-        icon="i-lucide-sparkles"
-        :fields="fields"
-        :providers="providers"
-        @submit="onSubmit"
-      >
-        <template #description>
-          Sign in to access your bespoke perfume collection
-        </template>
-        
-        <template #password-hint>
-          <ULink to="/reset-password" class="text-[#D4AF37] font-medium" tabindex="-1">
-            Forgot password?
-          </ULink>
-        </template>
-        
-        <template #footer>
-          <p class="text-center text-sm text-white/70">
-            Don't have an account? 
-            <ULink to="/register" class="text-[#D4AF37] font-semibold">
-              Create one
-            </ULink>
-          </p>
-        </template>
-      </UAuthForm>
-    </UPageCard>
-  </div>
+  <UPageCard class="w-full max-w-md glass-effect">
+    <h2 class="text-2xl font-bold mb-4">Login</h2>
+    <UFormField label="Email">
+      <UInput v-model="email" placeholder="your@email.com"/>
+    </UFormField>
+    <UFormField label="Password">
+      <UInput type="password" v-model="password" placeholder="Password"/>
+    </UFormField>
+    <UButton color="amber" class="mt-4" @click="login">Login</UButton>
+  </UPageCard>
 </template>

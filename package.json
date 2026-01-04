@@ -4,20 +4,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "nuxt dev",
     "build": "nuxt build",
+    "dev": "nuxt dev",
     "preview": "nuxt preview",
-    "generate": "nuxt generate",
-    "postinstall": "nuxt prepare"
+    "generate": "nuxt generate"
   },
   "dependencies": {
-    "nuxt": "^3.15.0",
     "@nuxt/ui": "^3.0.0",
-    "@nuxtjs/supabase": "^1.4.0",
+    "nuxt": "^3.15.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "typescript": "^5.7.2",
-    "@types/node": "^20.5.0"
+    "typescript": "^5.7.2"
   }
 }

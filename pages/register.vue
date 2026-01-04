@@ -1,61 +1,26 @@
 <script setup lang="ts">
-import type { AuthFormField } from '@nuxt/ui'
+import { ref } from 'vue'
+const name = ref('')
+const email = ref('')
+const password = ref('')
 
-const fields: AuthFormField[] = [
-  {
-    name: 'name',
-    type: 'text',
-    label: 'Full Name',
-    placeholder: 'John Doe',
-    required: true,
-    icon: 'i-lucide-user'
-  },
-  {
-    name: 'email',
-    type: 'email',
-    label: 'Email',
-    placeholder: 'your.email@example.com',
-    required: true,
-    icon: 'i-lucide-mail'
-  },
-  {
-    name: 'password',
-    label: 'Password',
-    type: 'password',
-    placeholder: 'Create a password',
-    required: true,
-    icon: 'i-lucide-lock'
-  }
-]
-
-function onSubmit(data: Record<string, any>) {
-  // فقط نمایش Toast شبیه ثبت نام موفق
-  alert(`Demo Registration:\nName: ${data.name}\nEmail: ${data.email}`)
+function register() {
+  alert(`Name: ${name.value}\nEmail: ${email.value}\nPassword: ${password.value}\n(Mock register)`)
 }
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-[#D4AF37]/20 via-[#00A86B]/20 to-[#000080]/20">
-    <UPageCard class="w-full max-w-md glass-effect">
-      <UAuthForm
-        title="Create Account"
-        icon="i-lucide-user-plus"
-        :fields="fields"
-        @submit="onSubmit"
-      >
-        <template #description>
-          Begin your journey to your signature scent
-        </template>
-        
-        <template #footer>
-          <p class="text-center text-sm text-white/70">
-            Already have an account? 
-            <ULink to="/login" class="text-[#D4AF37] font-semibold">
-              Sign in
-            </ULink>
-          </p>
-        </template>
-      </UAuthForm>
-    </UPageCard>
-  </div>
+  <UPageCard class="w-full max-w-md glass-effect">
+    <h2 class="text-2xl font-bold mb-4">Register</h2>
+    <UFormField label="Full Name">
+      <UInput v-model="name" placeholder="John Doe"/>
+    </UFormField>
+    <UFormField label="Email">
+      <UInput v-model="email" placeholder="your@email.com"/>
+    </UFormField>
+    <UFormField label="Password">
+      <UInput type="password" v-model="password" placeholder="Password"/>
+    </UFormField>
+    <UButton color="emerald" class="mt-4" @click="register">Create Account</UButton>
+  </UPageCard>
 </template>
