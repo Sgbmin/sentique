@@ -1,16 +1,5 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  extends: ['@nuxt/ui'],
-  
-  modules: ['@nuxtjs/supabase', '@nuxt/ui'],
-  
-  supabase: {
-    redirectOptions: {
-      login: '/login',
-      callback: '/confirm',
-      exclude: ['/', '/products', '/products/*']
-    }
-  },
+  modules: ['@nuxt/ui'], 
 
   css: ['~/assets/css/main.css'],
 
