@@ -1,14 +1,40 @@
 :root {
   --color-luxury-gold: #D4AF37;
-  --color-jade: #00A86B;
-  --color-navy: #000080;
+  --color-jade: #00A86B;        
+  --color-navy: #000080;   
 }
 
 .luxury-gradient {
-  background: linear-gradient(135deg, var(--color-luxury-gold) 0%, var(--color-jade) 50%, var(--color-navy) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-luxury-gold) 0%,
+    var(--color-jade) 50%,
+    var(--color-navy) 100%
+  );
+  border-radius: 16px;
+  color: white;
+  padding: 1rem;
 }
 
 .glass-effect {
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1rem;
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  background-color: var(--color-navy);
+  color: white;
+}
+
+a {
+  color: var(--color-luxury-gold);
+  text-decoration: none;
+}
+
+h1, h2, h3 {
+  color: var(--color-luxury-gold);
 }
