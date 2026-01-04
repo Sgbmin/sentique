@@ -1,16 +1,12 @@
 <script setup lang="ts">
-definePageMeta({
-  middleware: 'auth'
-})
 
-const supabase = useSupabaseClient()
-const toast = useToast()
+import { ref } from 'vue'
 
 const customPerfume = ref({
   name: '',
-  topNotes: [],
-  heartNotes: [],
-  baseNotes: [],
+  topNotes: [] as string[],
+  heartNotes: [] as string[],
+  baseNotes: [] as string[],
   intensity: 50
 })
 
@@ -20,23 +16,8 @@ const noteOptions = {
   base: ['Oud', 'Sandalwood', 'Vanilla', 'Amber', 'Musk', 'Patchouli']
 }
 
-async function saveCustomPerfume() {
-  const { error } = await supabase
-    .from('custom_perfumes')
-    .insert([{
-      user_id: (await supabase.auth.getUser()).data.user?.id,
-      ...customPerfume.value
-    }])
-
-  if (error) {
-    toast.add({ title: 'Error', description: error.message, color: 'error' })
-  } else {
-    toast.add({ 
-      title: 'Success', 
-      description: 'Your custom perfume has been saved!',
-      color: 'success'
-    })
-  }
+function saveCustomPerfume() {
+  alert(`Demo: Your perfume "${customPerfume.value.name}" has been saved!`)
 }
 </script>
 
@@ -53,6 +34,7 @@ async function saveCustomPerfume() {
       <div class="grid lg:grid-cols-3 gap-8">
         <!-- Builder -->
         <div class="lg:col-span-2 space-y-6">
+          <!-- Perfume Name -->
           <UCard>
             <UFormField label="Perfume Name" required>
               <UInput
@@ -63,6 +45,7 @@ async function saveCustomPerfume() {
             </UFormField>
           </UCard>
 
+          <!-- Top Notes -->
           <UCard>
             <template #header>
               <h3 class="font-semibold flex items-center gap-2">
@@ -77,6 +60,7 @@ async function saveCustomPerfume() {
             />
           </UCard>
 
+          <!-- Heart Notes -->
           <UCard>
             <template #header>
               <h3 class="font-semibold flex items-center gap-2">
@@ -91,6 +75,7 @@ async function saveCustomPerfume() {
             />
           </UCard>
 
+          <!-- Base Notes -->
           <UCard>
             <template #header>
               <h3 class="font-semibold flex items-center gap-2">
@@ -105,6 +90,7 @@ async function saveCustomPerfume() {
             />
           </UCard>
 
+          <!-- Intensity -->
           <UCard>
             <UFormField label="Intensity">
               <USlider v-model="customPerfume.intensity" :min="0" :max="100" />
@@ -158,6 +144,7 @@ async function saveCustomPerfume() {
                   block
                   size="lg"
                   icon="i-lucide-shopping-cart"
+                  @click="() => alert('Demo: Order clicked')"
                 >
                   Order Custom Bottle
                 </UButton>
