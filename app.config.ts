@@ -3,7 +3,9 @@ export default defineAppConfig({
     colors: {
       primary: 'amber',
       secondary: 'emerald',
-      tertiary: 'blue'
+      tertiary: 'blue',
+      amber: 'amber',
+      emerald: 'emerald'
     },
     button: {
       slots: {
