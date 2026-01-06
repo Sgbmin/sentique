@@ -1,11 +1,17 @@
 export default defineAppConfig({
   ui: {
     colors: {
+      // These are your semantic names
       primary: 'amber',
       secondary: 'emerald',
       tertiary: 'blue',
+      
+      // YOU MUST ADD THESE:
+      // These tell TypeScript: "The color 'amber' is a valid option"
       amber: 'amber',
-      emerald: 'emerald'
+      emerald: 'emerald',
+      blue: 'blue',
+      gray: 'slate' 
     },
     button: {
       slots: {
